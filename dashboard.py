@@ -4,14 +4,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
-print("현재 디렉토리:", os.getcwd())
-print("파일 목록:", os.listdir())
 
-file_path = "unity_analytics_sample_final.xlsx"
-if os.path.exists(file_path):
-    print("✅ 파일이 존재합니다!")
-else:
-    print("❌ 파일을 찾을 수 없습니다. 올바른 폴더에 넣어주세요.")
+file_path = os.path.abspath("unity_analytics_sample_final.xlsx")
+st.write(f"📂 파일 경로: `{file_path}`")
+
+if not os.path.exists(file_path):
+    st.error("❌ 데이터 파일을 찾을 수 없습니다. 파일 위치를 확인해주세요!")
+    st.stop()
+
+df = pd.read_excel(file_path)
 
 st.cache_data.clear()  # 캐시 초기화
 
