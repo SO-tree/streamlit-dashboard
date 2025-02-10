@@ -18,6 +18,7 @@ else:
 # ✅ 데이터 캐싱: 엑셀 파일 불러오기 (openpyxl 엔진 필요)
 @st.cache_data
 def load_data():
+    # 파일 이름을 올바르게 지정합니다.
     excel_file = os.path.join(current_dir, "unity_analytics_sample_final.xlsx")
     if os.path.exists(excel_file):
         return pd.read_excel(excel_file, engine='openpyxl')
@@ -29,7 +30,7 @@ df = load_data()
 if df.empty:
     st.stop()
 
-# 날짜 컬럼 변환 (엑셀 데이터에 '날짜' 컬럼이 존재해야 함)
+# 날짜 컬럼 변환 (엑셀 파일에 '날짜' 컬럼이 있어야 합니다)
 df["날짜"] = pd.to_datetime(df["날짜"])
 
 # 📌 Streamlit 대시보드 시작
