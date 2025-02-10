@@ -16,7 +16,7 @@ else:
 @st.cache_data
 def load_data():
     return pd.read_csv("unity_analytics_sample_final.csv")
-
+    
 df = load_data()
 df["날짜"] = pd.to_datetime(df["날짜"])
 
