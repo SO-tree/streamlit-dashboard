@@ -18,7 +18,7 @@ else:
 # ✅ 데이터 캐싱: 엑셀 파일 불러오기 (openpyxl 엔진 필요)
 @st.cache_data
 def load_data():
-    excel_file = os.path.join(current_dir, "unity_analytics_sample.final.xlsx")
+    excel_file = os.path.join(current_dir, "unity_analytics_sample_final.xlsx")
     if os.path.exists(excel_file):
         return pd.read_excel(excel_file, engine='openpyxl')
     else:
