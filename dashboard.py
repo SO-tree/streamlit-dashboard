@@ -31,18 +31,17 @@ if uploaded_file:
         st.line_chart(daily_installs, use_container_width=True)
         st.bar_chart(weekly_installs, use_container_width=True)
 
-# ✅ 유입 경로 분석 (파이 차트)
-st.subheader("📌 유입 경로 분석")
-channel_data = df[df["이벤트"] == "앱 설치"]["유입 채널"].dropna().value_counts()  # NaN 제거
-
-if not channel_data.empty:
-    fig, ax = plt.subplots()
-    ax.pie(channel_data, labels=channel_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
-    ax.set_title("유입 경로 분석", fontproperties=fontprop)
-    st.pyplot(fig)
-else:
-    st.warning("⚠ 유입 경로 데이터가 없습니다.")
-
+        # ✅ 유입 경로 분석 (파이 차트)
+        st.subheader("📌 유입 경로 분석")
+        channel_data = df[df["이벤트"] == "앱 설치"]["유입 채널"].dropna().value_counts()
+        
+        if not channel_data.empty:
+            fig, ax = plt.subplots()
+            ax.pie(channel_data.values, labels=channel_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
+            ax.set_title("유입 경로 분석", fontproperties=fontprop)
+            st.pyplot(fig)
+        else:
+            st.warning("⚠ 유입 경로 데이터가 없습니다.")
 
     with tab2:
         st.header("🎮 유저 행동 분석")
@@ -53,7 +52,7 @@ else:
         
         if not sub_data.empty:
             fig, ax = plt.subplots()
-            ax.pie(sub_data, labels=sub_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
+            ax.pie(sub_data.values, labels=sub_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
             ax.set_title("서브 콘텐츠 참여율", fontproperties=fontprop)
             st.pyplot(fig)
         else:
@@ -71,7 +70,7 @@ else:
         
         if not payment_data.empty:
             fig, ax = plt.subplots()
-            ax.pie(payment_data, labels=payment_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
+            ax.pie(payment_data.values, labels=payment_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
             ax.set_title("과금 유저 비율", fontproperties=fontprop)
             st.pyplot(fig)
         else:
