@@ -68,11 +68,13 @@ with tab2:
     # ✅ 광고 소재별 성과 비교 (CTR, 설치율)
     st.subheader("📌 광고 소재별 성과 비교")
     ad_creatives = df[df["이벤트"] == "광고 클릭"]["광고 소재"].value_counts()
+df.columns = df.columns.str.strip()  # 공백 제거
 
-    if not ad_creatives.empty:
-        st.bar_chart(ad_creatives)
-    else:
-        st.warning("⚠ 광고 소재 데이터가 없습니다.")
+if "광고 소재" in df.columns and not df[df["이벤트"] == "광고 클릭"].empty:
+    ad_creatives = df[df["이벤트"] == "광고 클릭"]["광고 소재"].value_counts()
+else:
+    ad_creatives = pd.Series(dtype=int)  # 빈 데이터 처리
+
 
     # ✅ 유입 후 주요 행동 비교 (광고 유입 vs 오가닉)
     st.subheader("📌 유입 후 주요 행동 비교")
