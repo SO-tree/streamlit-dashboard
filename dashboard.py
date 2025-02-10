@@ -15,7 +15,7 @@ else:
 # ✅ 데이터 캐싱 (다른 사용자도 동일한 데이터 유지 가능)
 @st.cache_data
 def load_data():
-    return pd.read_csv("unity_analytics_sample_final.csv")
+    return pd.read_csv("unity_analytics_sample_final.xlsx")
     
 df = load_data()
 df["날짜"] = pd.to_datetime(df["날짜"])
