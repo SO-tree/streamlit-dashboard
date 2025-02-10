@@ -16,7 +16,8 @@ else:
     st.warning("⚠ NanumGothic 폰트 파일을 찾을 수 없습니다. 기본 폰트를 사용합니다.")
 
 # ✅ 데이터 캐싱: 엑셀 파일 불러오기 (openpyxl 엔진 필요)
-@st.cache_data
+st.cache_data.clear()
+
 def load_data():
     # 파일 이름을 올바르게 지정합니다.
     excel_file = os.path.join(current_dir, "unity_analytics_sample_final.xlsx")
