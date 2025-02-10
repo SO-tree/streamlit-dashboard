@@ -127,10 +127,20 @@ with tab3:
     session_length = df["플레이 시간"]
     st.histogram(session_length, bins=10, use_container_width=True)
 
-    # ✅ 게임 재방문율 (D7, D30)
-    st.subheader("📌 게임 재방문율 (D7, D30)")
+# ✅ 게임 재방문율 (D7, D30)
+st.subheader("📌 게임 재방문율 (D7, D30)")
+total_users = df["유저 ID"].nunique()
+
+if total_users > 0:
     retention_data = {
-        "D7": df[df["리텐션"] == "D7"]["유저 ID"].nunique()
+        "D7": (df[df["리텐션"] == "D7"]["유저 ID"].nunique() / total_users) * 100,
+        "D30": (df[df["리텐션"] == "D30"]["유저 ID"].nunique() / total_users) * 100
+    }
+else:
+    retention_data = {"D7": 0, "D30": 0}  # 유저 수가 0이면 0%로 설정
+
+retention_df = pd.DataFrame.from_dict(retention_data, orient="index", columns=["Retention Rate"])
+st.bar_chart(retention_df, use_container_width=True)
 
 
 with tab4:
