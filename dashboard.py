@@ -1,12 +1,8 @@
-
+import os
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
-import os
-current_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(current_dir, "unity_analytics_sample_final.xlsx")
-
 
 # 스크립트 파일의 위치를 기준으로 파일 경로를 설정
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,17 +13,30 @@ if not os.path.exists(file_path):
     st.error("❌ 데이터 파일을 찾을 수 없습니다. 파일 위치를 확인해주세요!")
     st.stop()
 
+# 캐시 초기화
+st.cache_data.clear()
 
-file_path = os.path.abspath("unity_analytics_sample_final.xlsx")
-st.write(f"📂 파일 경로: `{file_path}`")
+# NanumGothic 폰트 로드
+font_path = os.path.join(current_dir, "NanumGothic.ttf")
+if os.path.exists(font_path):
+    fm.fontManager.addfont(font_path)
+    plt.rc("font", family="NanumGothic")
+else:
+    st.warning("⚠ NanumGothic 폰트 파일을 찾을 수 없습니다. 기본 폰트를 사용합니다.")
 
-if not os.path.exists(file_path):
-    st.error("❌ 데이터 파일을 찾을 수 없습니다. 파일 위치를 확인해주세요!")
+# 데이터 로드 함수: file_path를 그대로 사용
+@st.cache_data
+def load_data():
+    if os.path.exists(file_path):
+        return pd.read_excel(file_path)
+    else:
+        st.error("⚠ 데이터 파일을 찾을 수 없습니다. 올바른 파일을 업로드하세요.")
+        return pd.DataFrame()
+
+df = load_data()
+if df.empty:
     st.stop()
 
-df = pd.read_excel(file_path)
-
-st.cache_data.clear()  # 캐시 초기화
 
 
 # ✅ NanumGothic 폰트 강제 로드
