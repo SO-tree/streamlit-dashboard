@@ -4,6 +4,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
+print("현재 디렉토리:", os.getcwd())
+print("파일 목록:", os.listdir())
+
+file_path = "unity_analytics_sample_final.xlsx"
+if os.path.exists(file_path):
+    print("✅ 파일이 존재합니다!")
+else:
+    print("❌ 파일을 찾을 수 없습니다. 올바른 폴더에 넣어주세요.")
+
 st.cache_data.clear()  # 캐시 초기화
 
 
