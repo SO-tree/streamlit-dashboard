@@ -39,17 +39,22 @@ if uploaded_file:
         st.subheader("📌 회원가입 완료율")
         st.line_chart(weekly_signup_rate, use_container_width=True)
     
-    with tab2:
-        st.header("🎮 유저 행동 분석")
-        
-        # ✅ 서브 콘텐츠 참여율
-        sub_contents = ["PVP 참여", "보급 참여", "미니게임 참여", "스텔라인 참여", "서브콘텐츠 없음"]
-        sub_data = df[df["이벤트"].isin(sub_contents)]["이벤트"].value_counts()
-        
+with tab2:
+    st.header("🎮 유저 행동 분석")
+    
+    # ✅ 서브 콘텐츠 참여율 (PVP, 보급, 미니게임, 스텔라인, 아무것도 안함)
+    sub_contents = ["PVP 참여", "보급 참여", "미니게임 참여", "스텔라인 참여", "서브콘텐츠 없음"]
+    sub_data = df[df["이벤트"].isin(sub_contents)]["이벤트"].value_counts()
+
+    # ✅ 데이터가 존재하는지 확인 후 차트 생성
+    if not sub_data.empty:
         fig, ax = plt.subplots()
         ax.pie(sub_data, labels=sub_data.index, autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
         ax.set_title("서브 콘텐츠 참여율", fontproperties=fontprop)
         st.pyplot(fig)
+    else:
+        st.warning("⚠ 서브 콘텐츠 참여 데이터가 없습니다.")
+
     
     with tab3:
         st.header("💰 수익데이터 분석")
