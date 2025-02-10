@@ -31,30 +31,20 @@ if uploaded_file:
         st.line_chart(daily_installs, use_container_width=True)
         st.bar_chart(weekly_installs, use_container_width=True)
 
-        # ✅ 회원가입 완료율 (위클리)
-        installs = df[df["이벤트"] == "앱 설치"].groupby("날짜").size()
-        signups = df[df["이벤트"] == "회원가입 완료"].groupby("날짜").size()
-        weekly_signup_rate = (signups.resample("W").sum() / installs.resample("W").sum()).fillna(0) * 100
+        # ✅ 유입 경로 분석 (파이 차트)
+        st.subheader("📌 유입 경로 분석")
+        channel_data = df[df["이벤트"] == "앱 설치"]["유입 채널"].value_counts()
         
-        st.subheader("📌 회원가입 완료율")
-        st.line_chart(weekly_signup_rate, use_container_width=True)
-    
+        if not channel_data.empty:
+            fig, ax = plt.subplots()
+            ax.pie(channel_data, labels=channel_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
+            ax.set_title("유입 경로 분석", fontproperties=fontprop)
+            st.pyplot(fig)
+        else:
+            st.warning("⚠ 유입 경로 데이터가 없습니다.")
+
     with tab2:
         st.header("🎮 유저 행동 분석")
-        
-        # ✅ 튜토리얼 완료율 (위클리)
-        tutorial_completions = df[df["이벤트"] == "튜토리얼 완료"].groupby("날짜").size()
-        weekly_tutorial_completion_rate = tutorial_completions.resample("W").sum()
-        
-        st.subheader("📌 튜토리얼 완료율")
-        st.line_chart(weekly_tutorial_completion_rate, use_container_width=True)
-        
-        # ✅ 스테이지 1 클리어율 (위클리)
-        stage_1_clears = df[df["이벤트"] == "스테이지 1 클리어"].groupby("날짜").size()
-        weekly_stage_1_clear_rate = stage_1_clears.resample("W").sum()
-        
-        st.subheader("📌 스테이지 1 클리어율")
-        st.line_chart(weekly_stage_1_clear_rate, use_container_width=True)
         
         # ✅ 서브 콘텐츠 참여율 (PVP, 보급, 미니게임, 스텔라인, 아무것도 안함)
         sub_contents = ["PVP 참여", "보급 참여", "미니게임 참여", "스텔라인 참여", "서브콘텐츠 없음"]
@@ -62,40 +52,26 @@ if uploaded_file:
         
         if not sub_data.empty:
             fig, ax = plt.subplots()
-            ax.pie(sub_data, labels=sub_data.index, autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
+            ax.pie(sub_data, labels=sub_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
             ax.set_title("서브 콘텐츠 참여율", fontproperties=fontprop)
             st.pyplot(fig)
         else:
             st.warning("⚠ 서브 콘텐츠 참여 데이터가 없습니다.")
-        
-        # ✅ 30분 이상 플레이한 유저 비율 (위클리)
-        long_play_users = df[df["이벤트"] == "30분 이상 플레이"].groupby("날짜").size()
-        weekly_long_play_users = long_play_users.resample("W").sum()
-        
-        st.subheader("📌 30분 이상 플레이한 유저 비율")
-        st.line_chart(weekly_long_play_users, use_container_width=True)
     
     with tab3:
         st.header("💰 수익데이터 분석")
         
-        # ✅ ARPU & ARPPU
-        total_revenue = df["결제 금액"].sum()
+        # ✅ 과금 유저 비율 (무료 vs 유료, 파이 차트)
+        st.subheader("📌 과금 유저 비율")
         paying_users = df[df["결제 금액"].notna()]["유저 ID"].nunique()
         total_users = df["유저 ID"].nunique()
+        free_users = total_users - paying_users
+        payment_data = pd.Series([free_users, paying_users], index=["무료 유저", "유료 유저"])
         
-        arpu = total_revenue / total_users
-        arppu = total_revenue / paying_users if paying_users > 0 else 0
-        
-        st.metric("ARPU", f"{arpu:,.0f} KRW")
-        st.metric("ARPPU", f"{arppu:,.0f} KRW")
-        
-        # ✅ 가장 많이 팔린 제품 TOP3
-        top_products = df[df["이벤트"] == "인앱 구매"]["구매한 상품"].value_counts().head(3)
-        
-        fig, ax = plt.subplots()
-        ax.bar(top_products.index, top_products.values, color="purple")
-        ax.set_title("인기 상품 분석", fontproperties=fontprop)
-        ax.set_xlabel("상품 ID", fontproperties=fontprop)
-        ax.set_ylabel("구매 수", fontproperties=fontprop)
-        ax.set_xticklabels(top_products.index, fontproperties=fontprop)
-        st.pyplot(fig)
+        if not payment_data.empty:
+            fig, ax = plt.subplots()
+            ax.pie(payment_data, labels=payment_data.index.astype(str), autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
+            ax.set_title("과금 유저 비율", fontproperties=fontprop)
+            st.pyplot(fig)
+        else:
+            st.warning("⚠ 과금 유저 데이터가 없습니다.")
