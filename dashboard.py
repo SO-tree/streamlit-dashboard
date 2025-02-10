@@ -4,6 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(current_dir, "unity_analytics_sample_final.xlsx")
+
 
 # 스크립트 파일의 위치를 기준으로 파일 경로를 설정
 current_dir = os.path.dirname(os.path.abspath(__file__))
