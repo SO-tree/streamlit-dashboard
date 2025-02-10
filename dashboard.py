@@ -149,18 +149,23 @@ with tab3:
     ax.set_ylabel("빈도")
     st.pyplot(fig)
 
-#게임 재방문율 (D7, D30)
-st.subheader("📌 게임 재방문율 (D7, D30)")
-total_users = df["유저 ID"].nunique()
-if total_users > 0:
-    retention_data = {
-        "D7": (df[df["리텐션"] == "D7"]["유저 ID"].nunique() / total_users) * 100,
-        "D30": (df[df["리텐션"] == "D30"]["유저 ID"].nunique() / total_users) * 100
-    }
-else:
-    retention_data = {"D7": 0, "D30": 0}
-retention_df = pd.DataFrame.from_dict(retention_data, orient="index", columns=["Retention Rate"])
-st.bar_chart(retention_df, use_container_width=True)
+with tab3:
+    st.header("🎮 유저 행동 분석")
+    # ... 기존 탭3 관련 내용 ...
+
+    # ==================== 게임 재방문율 (D7, D30) ====================
+    st.subheader("📌 게임 재방문율 (D7, D30)")
+    total_users = df["유저 ID"].nunique()
+    if total_users > 0:
+        retention_data = {
+            "D7": (df[df["리텐션"] == "D7"]["유저 ID"].nunique() / total_users) * 100,
+            "D30": (df[df["리텐션"] == "D30"]["유저 ID"].nunique() / total_users) * 100
+        }
+    else:
+        retention_data = {"D7": 0, "D30": 0}
+    retention_df = pd.DataFrame.from_dict(retention_data, orient="index", columns=["Retention Rate"])
+    st.bar_chart(retention_df, use_container_width=True)
+
 
 # ==================== 탭4: 수익데이터 분석 ====================
 with tab4:
