@@ -1,8 +1,8 @@
-import os
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+import os
 
 # 스크립트 파일의 위치를 기준으로 파일 경로를 설정
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,7 +16,7 @@ if not os.path.exists(file_path):
 # 캐시 초기화
 st.cache_data.clear()
 
-# NanumGothic 폰트 로드
+# NanumGothic 폰트 강제 로드
 font_path = os.path.join(current_dir, "NanumGothic.ttf")
 if os.path.exists(font_path):
     fm.fontManager.addfont(font_path)
@@ -24,7 +24,7 @@ if os.path.exists(font_path):
 else:
     st.warning("⚠ NanumGothic 폰트 파일을 찾을 수 없습니다. 기본 폰트를 사용합니다.")
 
-# 데이터 로드 함수: file_path를 그대로 사용
+# 데이터 로드 함수: 위에서 정의한 file_path 사용
 @st.cache_data
 def load_data():
     if os.path.exists(file_path):
@@ -32,38 +32,12 @@ def load_data():
     else:
         st.error("⚠ 데이터 파일을 찾을 수 없습니다. 올바른 파일을 업로드하세요.")
         return pd.DataFrame()
-
-df = load_data()
-if df.empty:
-    st.stop()
-
-
-
-# ✅ NanumGothic 폰트 강제 로드
-font_path = "./NanumGothic.ttf"
-if os.path.exists(font_path):
-    fm.fontManager.addfont(font_path)
-    plt.rc("font", family="NanumGothic")
-else:
-    st.warning("⚠ NanumGothic 폰트 파일을 찾을 수 없습니다. 기본 폰트를 사용합니다.")
-
-# ✅ 데이터 로드 함수 (엑셀 지원)
-@st.cache_data
-def load_data():
-    file_path = "unity_analytics_sample_final.xlsx"  # Excel 파일 경로
-    if os.path.exists(file_path):
-        return pd.read_excel(file_path)
-    else:
-        st.error("⚠ 데이터 파일을 찾을 수 없습니다. 올바른 파일을 업로드하세요.")
-        return pd.DataFrame()
-
 
 df = load_data()
 if df.empty:
     st.stop()
 
 df.columns = df.columns.str.strip()  # 컬럼명 공백 제거
-
 df["날짜"] = pd.to_datetime(df["날짜"])
 
 # 📌 Streamlit 대시보드 시작
@@ -77,13 +51,9 @@ total_installs = df[df["이벤트"] == "앱 설치"].shape[0]
 total_signups = df[df["이벤트"] == "회원가입 완료"].shape[0]
 total_payers = df[df["결제 금액"].notna()]["유저 ID"].nunique()
 total_revenue = df["결제 금액"].sum()
-
 daily_installs = df[df["이벤트"] == "앱 설치"].groupby("날짜").size()
-
 total_active_users = df["유저 ID"].nunique()
-
 total_ad_clicks = df[df["이벤트"] == "광고 클릭"].shape[0]
-
 total_sessions = df.shape[0]
 
 with tab1:
@@ -120,7 +90,10 @@ with tab3:
     session_lengths = df["플레이 시간"].dropna()
     if not session_lengths.empty:
         st.subheader("📌 평균 세션 길이")
-        st.histogram(session_lengths, bins=10, use_container_width=True)
+        # st.histogram 대신 matplotlib을 사용하거나 다른 시각화 라이브러리 사용 필요
+        fig, ax = plt.subplots()
+        ax.hist(session_lengths, bins=10)
+        st.pyplot(fig)
 
 # ✅ 수익 데이터 분석
 arpu = total_revenue / total_active_users if total_active_users > 0 else 0
