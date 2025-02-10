@@ -149,7 +149,7 @@ with tab3:
     ax.set_ylabel("빈도")
     st.pyplot(fig)
 
-# ==================== 게임 재방문율 (D7, D30) ====================
+#게임 재방문율 (D7, D30)
 st.subheader("📌 게임 재방문율 (D7, D30)")
 total_users = df["유저 ID"].nunique()
 if total_users > 0:
