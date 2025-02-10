@@ -3,9 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 
-# 📌 한글 폰트 설정 추가 (폰트 깨짐 해결)
-plt.rcParams['font.family'] = 'NanumGothic'  # 한글 폰트 적용 (Windows: 맑은 고딕, Mac: AppleGothic 등)
-plt.rcParams['axes.unicode_minus'] = False  # 마이너스(-) 기호 깨짐 방지
+# ✅ 직접 폰트 적용
+font_path = "./NanumGothic.ttf"  # GitHub에 업로드한 폰트 파일 경로
+fontprop = fm.FontProperties(fname=font_path, size=12)
+
+plt.title("PVP 매칭 변화", fontproperties=fontprop)
+plt.xlabel("날짜", fontproperties=fontprop)
+plt.ylabel("횟수", fontproperties=fontprop)
 
 # 📌 Streamlit 대시보드 시작
 st.title("📊 Unity Analytics 대시보드")
