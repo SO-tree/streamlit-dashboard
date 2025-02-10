@@ -3,6 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
+import matplotlib.font_manager as fm
+
+# ✅ GitHub에 올린 폰트 직접 불러오기
+font_path = "./NanumGothic.ttf"
+fontprop = fm.FontProperties(fname=font_path)
+
 
 # ✅ 깃허브에 업로드한 NanumGothic.ttf 폰트 불러오기
 font_path = "./NanumGothic.ttf"  # 현재 저장소에 올린 폰트 경로
