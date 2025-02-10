@@ -38,12 +38,13 @@ else:
 # ✅ 데이터 로드 함수 (엑셀 지원)
 @st.cache_data
 def load_data():
-    file_path = "unity_analytics_sample_final.xlsx"  # XLSX 파일로 변경
+    file_path = "unity_analytics_sample_final.xlsx"  # Excel 파일 경로
     if os.path.exists(file_path):
-        return pd.read_excel(file_path)  # CSV 대신 Excel 파일 로드
+        return pd.read_excel(file_path)
     else:
         st.error("⚠ 데이터 파일을 찾을 수 없습니다. 올바른 파일을 업로드하세요.")
-        return pd.DataFrame()  # 빈 데이터프레임 반환
+        return pd.DataFrame()
+
 
 df = load_data()
 if df.empty:
