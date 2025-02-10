@@ -1,8 +1,11 @@
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
+st.cache_data.clear()  # 캐시 초기화
+
 
 # ✅ NanumGothic 폰트 강제 로드
 font_path = "./NanumGothic.ttf"
