@@ -39,22 +39,41 @@ if uploaded_file:
         st.subheader("📌 회원가입 완료율")
         st.line_chart(weekly_signup_rate, use_container_width=True)
     
-with tab2:
-    st.header("🎮 유저 행동 분석")
-    
-    # ✅ 서브 콘텐츠 참여율 (PVP, 보급, 미니게임, 스텔라인, 아무것도 안함)
-    sub_contents = ["PVP 참여", "보급 참여", "미니게임 참여", "스텔라인 참여", "서브콘텐츠 없음"]
-    sub_data = df[df["이벤트"].isin(sub_contents)]["이벤트"].value_counts()
-
-    # ✅ 데이터가 존재하는지 확인 후 차트 생성
-    if not sub_data.empty:
-        fig, ax = plt.subplots()
-        ax.pie(sub_data, labels=sub_data.index, autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
-        ax.set_title("서브 콘텐츠 참여율", fontproperties=fontprop)
-        st.pyplot(fig)
-    else:
-        st.warning("⚠ 서브 콘텐츠 참여 데이터가 없습니다.")
-
+    with tab2:
+        st.header("🎮 유저 행동 분석")
+        
+        # ✅ 튜토리얼 완료율 (위클리)
+        tutorial_completions = df[df["이벤트"] == "튜토리얼 완료"].groupby("날짜").size()
+        weekly_tutorial_completion_rate = tutorial_completions.resample("W").sum()
+        
+        st.subheader("📌 튜토리얼 완료율")
+        st.line_chart(weekly_tutorial_completion_rate, use_container_width=True)
+        
+        # ✅ 스테이지 1 클리어율 (위클리)
+        stage_1_clears = df[df["이벤트"] == "스테이지 1 클리어"].groupby("날짜").size()
+        weekly_stage_1_clear_rate = stage_1_clears.resample("W").sum()
+        
+        st.subheader("📌 스테이지 1 클리어율")
+        st.line_chart(weekly_stage_1_clear_rate, use_container_width=True)
+        
+        # ✅ 서브 콘텐츠 참여율 (PVP, 보급, 미니게임, 스텔라인, 아무것도 안함)
+        sub_contents = ["PVP 참여", "보급 참여", "미니게임 참여", "스텔라인 참여", "서브콘텐츠 없음"]
+        sub_data = df[df["이벤트"].isin(sub_contents)]["이벤트"].value_counts()
+        
+        if not sub_data.empty:
+            fig, ax = plt.subplots()
+            ax.pie(sub_data, labels=sub_data.index, autopct='%1.1f%%', startangle=90, fontproperties=fontprop)
+            ax.set_title("서브 콘텐츠 참여율", fontproperties=fontprop)
+            st.pyplot(fig)
+        else:
+            st.warning("⚠ 서브 콘텐츠 참여 데이터가 없습니다.")
+        
+        # ✅ 30분 이상 플레이한 유저 비율 (위클리)
+        long_play_users = df[df["이벤트"] == "30분 이상 플레이"].groupby("날짜").size()
+        weekly_long_play_users = long_play_users.resample("W").sum()
+        
+        st.subheader("📌 30분 이상 플레이한 유저 비율")
+        st.line_chart(weekly_long_play_users, use_container_width=True)
     
     with tab3:
         st.header("💰 수익데이터 분석")
